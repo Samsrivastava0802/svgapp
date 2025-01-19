@@ -9,39 +9,41 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.samridhi.svgapp.navigation.AppNavGraph
+import com.samridhi.svgapp.navigation.AppNavigationActions
 import com.samridhi.svgapp.ui.theme.SvgAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             SvgAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                SvgApp(
+                    onNavigationEnd = {
+                        finish()
+                    }
+                )
             }
         }
     }
 }
-
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SvgAppTheme {
-        Greeting("Android")
+fun SvgApp(
+    onNavigationEnd: () -> Unit
+) {
+    val navController = rememberNavController()
+    val navActions = remember(navController) {
+        AppNavigationActions(navController, onNavigationEnd)
     }
+    AppNavGraph(
+        navController = navController,
+        navActions = navActions
+    )
 }

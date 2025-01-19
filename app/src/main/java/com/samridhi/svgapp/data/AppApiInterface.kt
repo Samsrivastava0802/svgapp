@@ -1,4 +1,4 @@
-package com.samridhi.svgapp.data.repositories
+package com.samridhi.svgapp.data
 
 import com.samridhi.svgapp.data.models.response.DogImages
 import retrofit2.Response
